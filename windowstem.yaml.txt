@@ -1,0 +1,86 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Launch an EC2 instance for Windows
+
+Parameters:
+  AmiID:
+    Description: The AMI to use
+    Type: String
+    Default: 'ami-0013b6db63dc8ec39'
+
+  InstanceType:
+    Description: Instance Type
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - t3.large
+      - m5.large
+      - m5.xlarge
+      - m5.2xlarge
+      - m5a.large
+      - m5a.xlarge
+      - m5a.2xlarge
+      - c5.large
+      - c5.xlarge
+      - c5.2xlarge
+      - c5a.large
+      - c5a.xlarge
+      - c5a.2xlarge
+
+  KeyName:
+    Description: Name of the key pair to use for SSH access
+    Type: AWS::EC2::KeyPair::KeyName
+    Default: my-ec2-keypair
+
+  VpcId:
+    Description: VPC ID where the instance will be launched
+    Type: AWS::EC2::VPC::Id
+    Default: vpc-01fe21cb82763266a
+
+  SubnetId:
+    Description: Subnet ID where the instance will be launched
+    Type: AWS::EC2::Subnet::Id
+    Default: subnet-0fbe8b22d99cc2a8d
+
+Resources:
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    DeletionPolicy: Retain 
+    Properties:
+      GroupDescription: Enable SSH (port 22) and HTTP (port 80) access
+      VpcId: !Ref VpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+      Tags:
+        - Key: Name
+          Value: SimpleEC2-SG
+
+  EC2Instance:
+    Type: AWS::EC2::Instance
+    DeletionPolicy: Retain 
+    Properties:
+      ImageId: !Ref AmiID
+      InstanceType: !Ref InstanceType
+      KeyName: !Ref KeyName
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      Tags:
+        - Key: Name
+          Value: SimpleEC2Instance
+
+Outputs:
+  InstanceId:
+    Description: The Instance ID of the launched EC2 instance
+    Value: !Ref EC2Instance
+
+  InstancePublicIP:
+    Description: The public IP address of the launched EC2 instance
+    Value: !GetAtt EC2Instance.PublicIp
