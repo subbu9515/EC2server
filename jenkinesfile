@@ -1,0 +1,61 @@
+
+pipeline {
+    agent any
+
+    environment {
+        AWS_REGION = 'us-east-1'  // Change if needed
+        STACK_NAME = 'WindowsEC2Stack'
+        TEMPLATE_FILE = 'windowstem.yaml.txt'
+        AWS_CREDENTIALS = 'aws-credentials-id' // Replace with your Jenkins AWS credential ID
+    }
+
+    stages {
+        stage('Checkout CloudFormation Template') {
+            steps {
+                git url: 'https://github.com/subbu9515/EC2server.git', branch: 'main'
+            }
+        }
+
+        stage('Validate CloudFormation Template') {
+            steps {
+                withAWS(credentials: "${AWS_CREDENTIALS}", region: "${AWS_REGION}") {
+                    sh """
+                        aws cloudformation validate-template \
+                        --template-body file://${TEMPLATE_FILE}
+                    """
+                }
+            }
+        }
+
+        stage('Deploy CloudFormation Stack') {
+            steps {
+                withAWS(credentials: "${AWS_CREDENTIALS}", region: "${AWS_REGION}") {
+                    sh """
+                        aws cloudformation deploy \
+                          --stack-name ${STACK_NAME} \
+                          --template-file ${TEMPLATE_FILE} \
+                          --capabilities CAPABILITY_NAMED_IAM \
+                          --parameter-overrides \
+                            AmiID=ami-0013b6db63dc8ec39 \
+                            InstanceType=t2.micro \
+                            KeyName=my-ec2-keypair \
+                            VpcId=vpc-01fe21cb82763266a \
+                            SubnetId=subnet-0fbe8b22d99cc2a8d
+                    """
+                }
+            }
+        }
+
+        stage('Describe Outputs') {
+            steps {
+                withAWS(credentials: "${AWS_CREDENTIALS}", region: "${AWS_REGION}") {
+                    sh """
+                        aws cloudformation describe-stacks \
+                        --stack-name ${STACK_NAME} \
+                        --query "Stacks[0].Outputs"
+                    """
+                }
+            }
+        }
+    }
+}
