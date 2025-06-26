@@ -79,7 +79,7 @@ def getAssumedArn(Environment){
   }
 
 
-def readJson(String text) {
+def readJSON(String text) {
     def accessKeyId = sh(script: "echo '${text}' | jq -r '.Credentials.AccessKeyId'", returnStdout: true).trim()
     def secretAccessKey = sh(script: "echo '${text}' | jq -r '.Credentials.SecretAccessKey'", returnStdout: true).trim()
     def sessionToken = sh(script: "echo '${text}' | jq -r '.Credentials.SessionToken'", returnStdout: true).trim()
