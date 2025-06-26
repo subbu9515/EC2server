@@ -7,7 +7,9 @@ env.ARN = getAssumedArn(env.Environment)
 // changes: change template file location
 env.TEMPLATE_FILE  = 'server.yaml'
 env.STACK_NAME = 'Linuxserver'
-env.AWS_REGION = 'ca-central-1'
+
+// changes: change region name
+env.AWS_REGION = 'us-east-1'
 env.SESSION_NAME = 'jenkins-linux-server'
 
 pipeline {
