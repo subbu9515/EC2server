@@ -6,12 +6,6 @@ env.AWS_REGION = 'ca-central-1'
 env.SESSION_NAME = 'jenkins'
 
 pipeline {
-  agent {  
-    node {
-        label 'DockerAgent'
-      }
-  }
-
   stages {
     stage('git Checkout') {
       steps {
