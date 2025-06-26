@@ -10,7 +10,7 @@ agent any
 
   stages {
     stage('git Checkout') {
-      steps {
+      steps {p
         // where branch?
         //git url:https://tfs-glo-lexisadvance.visualstudio.com/DefaultCollection/lncanada/_git/Windows%20Server%20Upgrade, branch: <branch_name>
         git branch: 'main', changelog: false, poll: false, url: 'https://github.com/subbu9515/EC2server.git'
@@ -21,7 +21,7 @@ agent any
       steps {
         script {
           // why region?
-          def credsJson = sh( script: "#!/bin/sh -e\naws sts assume-role --role-arn '${env.ARN}' --role-session-name '${env.SESSION_NAME}' --region ${env.AWS_REGION}", returnStdout: true).trim()
+          def credsJson = sh( script: "aws sts assume-role --role-arn '${env.ARN}' --role-session-name '${env.SESSION_NAME}' --region ${env.AWS_REGION}", returnStdout: true).trim()
           def creds = readJSON text: credsJson
           env.AWS_ACCESS_KEY_ID = creds.Credentials.AccessKeyId
           env.AWS_SECRET_ACCESS_KEY = creds.Credentials.SecretAccessKey
