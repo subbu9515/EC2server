@@ -2,7 +2,7 @@
 env.ARN = getAssumedArn("")
 env.TEMPLATE_FILE  = 'server.yaml'
 env.STACK_NAME = 'Linuxserver'
-env.AWS_REGION = 'ca-central-1'
+env.AWS_REGION = 'us-east-1'
 env.SESSION_NAME = 'jenkins'
 
 pipeline {
