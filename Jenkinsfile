@@ -77,7 +77,7 @@ def getAssumedArn(Environment){
     return 'arn:aws:iam::221082192077:role/Admin'
 
   }
-def readJson(String text) {
+def readJSON(String text) {
     def slurper = new groovy.json.JsonSlurper()
     return slurper.parseText(text)
 }   
