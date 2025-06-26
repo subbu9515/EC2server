@@ -50,16 +50,19 @@ agent any
           "AWS_SECRET_ACCESS_KEY=${env.AWS_SECRET_ACCESS_KEY}",
           "AWS_SESSION_TOKEN=${env.AWS_SESSION_TOKEN}"
         ]) {
-          sh """ aws cloudformation deploy
-            --stack-name ${env.STACK_NAME}
-            --template-file ${env.TEMPLATE_FILE}
-            --region ${env.AWS_REGION}
-            --capabilities CAPABILITY_NAMED_IAM
-            --parameter-overrides
-                AmiID=ami-0013b6db63dc8ec39
-                InstanceType=t2.micro
-                VpcId=vpc-01fe21cb82763266a
-                SubnetId=subnet-0fbe8b22d99cc2a8d"""
+          sh """
+            aws cloudformation deploy \
+              --stack-name ${env.STACK_NAME} \
+              --template-file ${env.TEMPLATE_FILE} \
+              --region ${env.AWS_REGION} \
+              --capabilities CAPABILITY_NAMED_IAM \
+              --parameter-overrides \\
+                  AmiID=ami-0013b6db63dc8ec39 \\
+                  InstanceType=t2.micro \\
+                  VpcId=vpc-01fe21cb82763266a \\
+                  SubnetId=subnet-0fbe8b22d99cc2a8d
+            """
+
         }
       }
     }
