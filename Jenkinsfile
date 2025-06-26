@@ -2,7 +2,7 @@
 //@Library(['release@master', 'sharedlibrary@release/3.0.0'])
 
 // changes: env.Environment
-env.ARN = getAssumedArn("")
+env.ARN = getAssumedArn(env.Environment)
 
 // changes: change template file location
 env.TEMPLATE_FILE  = 'server.yaml'
