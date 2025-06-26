@@ -76,5 +76,9 @@ agent any
 def getAssumedArn(Environment){
     return 'arn:aws:iam::221082192077:role/Admin'
 
-  }        
+  }
+def readJson(String text) {
+    def slurper = new JsonSlurper()
+    return slurper.parseText(text)
+}
         
