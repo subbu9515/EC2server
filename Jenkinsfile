@@ -22,7 +22,7 @@ agent any
         script {
           // why region?
           def credsJson = sh( script: "aws sts assume-role --role-arn '${env.ARN}' --role-session-name '${env.SESSION_NAME}' --region ${env.AWS_REGION}", returnStdout: true).trim()
-          def creds = readJSON text: credsJson
+          def creds = readJSON(credsJson)
           env.AWS_ACCESS_KEY_ID = creds.Credentials.AccessKeyId
           env.AWS_SECRET_ACCESS_KEY = creds.Credentials.SecretAccessKey
           env.AWS_SESSION_TOKEN = creds.Credentials.SessionToken
