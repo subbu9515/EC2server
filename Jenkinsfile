@@ -19,6 +19,10 @@ pipeline {
 //  }
 //}
 
+  parameters {
+    choice (name: 'Environment', choices : 'Dev\nProd', description : 'Select the Environment')
+  }
+  
   stages {
     stage('git Checkout') {
       steps {
