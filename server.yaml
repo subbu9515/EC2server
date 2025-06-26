@@ -1,0 +1,44 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: Launch a EC2 instance for linux
+Parameters:
+  AmiID:
+    Description: The AMI to use
+    Type: String
+    Default: 'ami-0013b6db63dc8ec39'
+  InstanceType:
+    Description: Instance Type
+    Type: String
+    Default: t2.micro
+  VpcId:
+      Description: VPC ID where the instance will be launched
+      Type: AWS::EC2::VPC::Id
+      Default: vpc-01fe21cb82763266a
+  SubnetId:
+      Description: Subnet ID where the instance will be launched
+      Type: AWS::EC2::Subnet::Id
+      Default: subnet-0fbe8b22d99cc2a8d
+Resources:
+  EC2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Enable SSH (port 22) and HTTP (port 80) access
+      VpcId: !Ref VpcId
+      Tags:
+        - Key: Name
+          Value: SimpleEC2-SG
+
+  EC2Instance:
+    Type: AWS::EC2::Instance 
+    Properties:
+      ImageId: !Ref AmiID
+      InstanceType: !Ref InstanceType
+      SubnetId: !Ref SubnetId
+      SecurityGroupIds:
+        - !Ref EC2SecurityGroup
+      Tags:
+        - Key: Name
+          Value: SimpleEC2Instance
+Outputs:
+  InstanceId:
+    Description: Instance ID
+    Value: !Ref EC2Instance
