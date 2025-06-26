@@ -69,7 +69,7 @@ agent any
 
     stage('Outputs') {
       steps {
-        sh """aws cloudformation describe-stacks --stack-name ${env.STACK_NAME} --region ${env.AWS_REGION} --query "Stacks[0].Outputs"""
+        sh """aws cloudformation describe-stacks --stack-name ${env.STACK_NAME} --region ${env.AWS_REGION} --query "Stacks[0].Outputs""""
       }
     }
   }
