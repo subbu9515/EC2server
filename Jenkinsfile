@@ -78,7 +78,6 @@ def getAssumedArn(Environment){
 
   }
 def readJson(String text) {
-    def slurper = new JsonSlurper()
+    def slurper = new groovy.json.JsonSlurper()
     return slurper.parseText(text)
-}
-        
+}   
