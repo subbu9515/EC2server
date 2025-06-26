@@ -1,18 +1,30 @@
+// changes: uncomment this line
 //@Library(['release@master', 'sharedlibrary@release/3.0.0'])
+
+// changes: env.Environment
 env.ARN = getAssumedArn("")
+
+// changes: change template file location
 env.TEMPLATE_FILE  = 'server.yaml'
 env.STACK_NAME = 'Linuxserver'
-env.AWS_REGION = 'us-east-1'
-env.SESSION_NAME = 'jenkins'
+env.AWS_REGION = 'ca-central-1'
+env.SESSION_NAME = 'jenkins-linux-server'
 
 pipeline {
-agent any
+  agent any
+//changes: need this agent
+//agent {
+//  node {
+//    label 'DockerAgent'
+//  }
+//}
 
   stages {
     stage('git Checkout') {
       steps {
         // where branch?
         //git url:https://tfs-glo-lexisadvance.visualstudio.com/DefaultCollection/lncanada/_git/Windows%20Server%20Upgrade, branch: <branch_name>
+        // changes: change url and branch
         git branch: 'main', changelog: false, poll: false, url: 'https://github.com/subbu9515/EC2server.git'
       }
     }
@@ -20,8 +32,9 @@ agent any
     stage('Assume Role') {
       steps {
         script {
-          // why region?
           def credsJson = sh( script: "aws sts assume-role --role-arn '${env.ARN}' --role-session-name '${env.SESSION_NAME}' --region ${env.AWS_REGION}", returnStdout: true).trim()
+          // use readJSON from shared library
+          // def creds = readJSON text: credsJson
           def creds = readJSON(credsJson)
           env.AWS_ACCESS_KEY_ID = creds.Credentials.AccessKeyId
           env.AWS_SECRET_ACCESS_KEY = creds.Credentials.SecretAccessKey
@@ -79,11 +92,16 @@ agent any
 
 
 def getAssumedArn(Environment){
+    // uncomment this
+    //switch(Environment) {
+    //  case 'Dev': return 'arn:aws:iam::393012300164:role/AssetApplication_1939/JenkinsExecutionRole'
+     // default: return 'arn:aws:iam::393012300164:role/AssetApplication_1939/JenkinsExecutionRole'
+    //}
     return 'arn:aws:iam::221082192077:role/Admin'
+}
 
-  }
 
-
+// changes: remove this func
 def readJSON(String text) {
     def accessKeyId = sh(script: "echo '${text}' | jq -r '.Credentials.AccessKeyId'", returnStdout: true).trim()
     def secretAccessKey = sh(script: "echo '${text}' | jq -r '.Credentials.SecretAccessKey'", returnStdout: true).trim()
