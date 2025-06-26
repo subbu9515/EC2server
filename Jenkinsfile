@@ -77,7 +77,9 @@ def getAssumedArn(Environment){
     return 'arn:aws:iam::221082192077:role/Admin'
 
   }
-def readJSON(String text) {
+
+
+def readJson(String text) {
     def accessKeyId = sh(script: "echo '${text}' | jq -r '.Credentials.AccessKeyId'", returnStdout: true).trim()
     def secretAccessKey = sh(script: "echo '${text}' | jq -r '.Credentials.SecretAccessKey'", returnStdout: true).trim()
     def sessionToken = sh(script: "echo '${text}' | jq -r '.Credentials.SessionToken'", returnStdout: true).trim()
@@ -87,6 +89,6 @@ def readJSON(String text) {
             AccessKeyId: accessKeyId,
             SecretAccessKey: secretAccessKey,
             SessionToken: sessionToken
-        ]
-    ]
+        ]
+    ]
 }
