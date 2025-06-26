@@ -1,6 +1,6 @@
 //@Library(['release@master', 'sharedlibrary@release/3.0.0'])
 env.ARN = getAssumedArn("")
-env.TEMPLATE_FILE  = 'lnca_server_deploy/EC2linuServers/ServerBuild'
+env.TEMPLATE_FILE  = 'server.yaml'
 env.STACK_NAME = 'Linuxserver'
 env.AWS_REGION = 'ca-central-1'
 env.SESSION_NAME = 'jenkins'
@@ -78,14 +78,7 @@ pipeline {
 
 
 def getAssumedArn(Environment){
-  switch(Environment) {
-   // case 'Dev': return 'arn:aws:iam::393012300164:role/AssetApplication_1939/JenkinsExecutionRole'
-    //default: return 'arn:aws:iam::393012300164:role/AssetApplication_1939/JenkinsExecutionRole'
+    return 'arn:aws:iam::221082192077:role/Admin'
 
-    case 'Dev': return 'arn:aws:iam::221082192077:role/Admin'
-    default: return 'arn:aws:iam::221082192077:role/Admin'
-  }
-}
-
-        
+  }        
         
