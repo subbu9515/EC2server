@@ -6,6 +6,8 @@ env.AWS_REGION = 'ca-central-1'
 env.SESSION_NAME = 'jenkins'
 
 pipeline {
+agent any
+
   stages {
     stage('git Checkout') {
       steps {
