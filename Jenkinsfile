@@ -10,7 +10,7 @@ agent any
 
   stages {
     stage('git Checkout') {
-      steps {p
+      steps {
         // where branch?
         //git url:https://tfs-glo-lexisadvance.visualstudio.com/DefaultCollection/lncanada/_git/Windows%20Server%20Upgrade, branch: <branch_name>
         git branch: 'main', changelog: false, poll: false, url: 'https://github.com/subbu9515/EC2server.git'
